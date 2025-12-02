@@ -1,6 +1,7 @@
 package net.lab1024.sa.base.module.support.file.service;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.toolkit.ArrayUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import net.lab1024.sa.base.common.code.UserErrorCode;
@@ -201,5 +202,64 @@ public class FileService {
         return SmartPageUtil.convert2PageResult(page, list);
     }
 
+    /**
+     * 删除文件（根据 fileKey）
+     *
+     * @param fileKey 文件标识
+     * @return 删除结果
+     */
+    public ResponseDTO<String> deleteFile(String fileKey) {
+        if (StringUtils.isBlank(fileKey)) {
+            return ResponseDTO.userErrorParam("文件key不能为空");
+        }
 
+        FileVO fileVO = fileDao.getByFileKey(fileKey);
+        if (fileVO == null) {
+            return ResponseDTO.userErrorParam("文件不存在");
+        }
+
+        // 先删除存储中的文件
+        ResponseDTO<String> deleteResult = fileStorageService.delete(fileKey);
+        if (!deleteResult.getOk()) {
+            return deleteResult;
+        }
+
+        // 再删除数据库记录
+        fileDao.deleteById(fileVO.getFileId());
+        return ResponseDTO.ok("删除成功");
+    }
+
+
+    /**
+     * 批量删除文件（根据 fileKey）
+     * @param fileKeys 文件标识
+     * @return 删除结果
+     */
+    public ResponseDTO<String> deleteFiles(String[] fileKeys) {
+        if (ArrayUtils.isEmpty(fileKeys)) {
+            return ResponseDTO.userErrorParam("文件key不能为空");
+        }
+        try {
+            for (String fileKey : fileKeys) {
+                if (StringUtils.isBlank(fileKey)) {
+                    return ResponseDTO.userErrorParam("文件key不能为空");
+                }
+                FileVO fileVO = fileDao.getByFileKey(fileKey);
+                if (fileVO == null) {
+                    return ResponseDTO.userErrorParam("文件不存在: " + fileKey);
+                }
+                // 先删除存储中的文件
+                ResponseDTO<String> deleteResult = fileStorageService.delete(fileKey);
+                if (!deleteResult.getOk()) {
+                    // 把出错的 fileKey 带到前端
+                    return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST, "删除失败, fileKey=" + fileKey + "，原因：" + deleteResult.getMsg());
+                }
+                // 再删除数据库记录
+                fileDao.deleteById(fileVO.getFileId());
+            }
+            return ResponseDTO.ok("删除成功");
+        } catch (Exception e) {
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST, "删除失败");
+        }
+    }
 }

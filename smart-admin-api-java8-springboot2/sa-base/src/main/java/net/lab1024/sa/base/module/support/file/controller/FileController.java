@@ -15,6 +15,7 @@ import net.lab1024.sa.base.module.support.file.domain.vo.FileUploadVO;
 import net.lab1024.sa.base.module.support.file.service.FileService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -69,5 +70,17 @@ public class FileController extends SupportBaseController {
         SmartResponseUtil.setDownloadFileHeader(response, fileDownloadVO.getMetadata().getFileName(), fileDownloadVO.getMetadata().getFileSize());
         // 下载
         response.getOutputStream().write(fileDownloadVO.getData());
+    }
+
+    @Operation(summary = "删除文件（根据fileKey）")
+    @PostMapping("/file/delete")
+    public ResponseDTO<String> delete(@RequestParam String fileKey) {
+        return fileService.deleteFile(fileKey);
+    }
+
+    @Operation(summary = "删除文件（根据fileKeys）")
+    @PostMapping("/file/deleteByKeys")
+    public ResponseDTO<String> deleteByKeys(@RequestBody String[] fileKeys) {
+        return fileService.deleteFiles(fileKeys);
     }
 }

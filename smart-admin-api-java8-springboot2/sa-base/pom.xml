@@ -310,6 +310,13 @@
             <version>${tika.version}</version>
         </dependency>
 
+        <!-- SFTP 支持 -->
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.55</version>
+        </dependency>
+
     </dependencies>
 
 
