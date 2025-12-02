@@ -93,6 +93,9 @@ public interface IFileStorageService {
         if ("xml".equalsIgnoreCase(fileExt)) {
             return "text/xml";
         }
+        if ("xlsx".equalsIgnoreCase(fileExt)) {
+            return "xlsx";
+        }
         return "";
     }
 
