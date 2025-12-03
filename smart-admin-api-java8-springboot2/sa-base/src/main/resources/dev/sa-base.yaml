@@ -34,22 +34,28 @@ spring:
         max-idle: 3
         max-wait: 30000ms
 
-  # 邮件，置以SSL的方式发送, 这个需要使用这种方式并且端口是465
+  # Gmail 邮件配置
+  # 注意：Gmail 需要使用应用专用密码（App Password），而不是普通密码！
+  # 获取应用专用密码步骤：
+  # 1. 登录 Google 账号 -> 安全性 -> 两步验证（需要先开启）
+  # 2. 在"应用专用密码"中生成新的密码（16位字符）
+  # 3. 将生成的密码填入下面的 password 字段
   mail:
-    host: smtp.163.com
-    port: 465
-    username: lab1024@163.com
-    password: LAB1024LAB
+    host: smtp.gmail.com
+    port: 587
+    username: longaotian0304@gmail.com  # 请替换为你的 Gmail 地址
+    password: cmla hnzg anev spon  # 请替换为 Gmail 应用专用密码（16位字符）
     test-connection: false
     properties:
       mail:
         smtp:
           auth: true
-          ssl:
+          starttls:
             enable: true
-            socketFactory:
-              class: com.sun.mail.util.MailSSLSocketFactory
-              fallback: false
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
         debug: false
 
   # json序列化相关配置

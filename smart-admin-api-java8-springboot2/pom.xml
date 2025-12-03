@@ -407,9 +407,6 @@
             <properties>
                 <profiles.active>dev</profiles.active>
             </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
         </profile>
         <!--测试环境-->
         <profile>
@@ -424,6 +421,9 @@
             <properties>
                 <profiles.active>pre</profiles.active>
             </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
         </profile>
         <!--生产环境-->
         <profile>
