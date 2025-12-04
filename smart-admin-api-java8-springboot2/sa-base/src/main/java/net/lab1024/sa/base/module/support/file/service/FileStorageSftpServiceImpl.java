@@ -171,6 +171,12 @@ public class FileStorageSftpServiceImpl implements IFileStorageService {
         }
     }
 
+
+    /**
+     * 删除文件
+     * @param fileKey
+     * @return
+     */
     @Override
     public ResponseDTO<String> delete(String fileKey) {
         if (StringUtils.isBlank(fileKey)) {
@@ -205,7 +211,7 @@ public class FileStorageSftpServiceImpl implements IFileStorageService {
      * 创建 SFTP 会话
      */
     private Session createSession() throws JSchException {
-        log.info("正在连接 SFTP 服务器: {}:{}, 用户: {}", host, port, username);
+        log.info("正在连接 SFTP 服务器111: {}:{}, 用户: {}", host, port, username);
         
         JSch jsch = new JSch();
         Session session = jsch.getSession(username, host, port);
