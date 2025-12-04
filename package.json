@@ -1,0 +1,11 @@
+{
+  "name": "smart-admin-pro",
+  "version": "1.0.0",
+  "description": "Smart Admin Pro - 统一启动脚本",
+  "scripts": {
+    "dev:js": "cd smart-admin-web-javascript && npm run dev",
+    "dev:ts": "cd smart-admin-web-typescript && npm run dev"
+  },
+  "private": true
+}
+

@@ -4,6 +4,7 @@ target/
 !**/src/main/**
 !**/src/test/**
 logs/
+package-lock.json
 
 ### STS ###
 .classpath
