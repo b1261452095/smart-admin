@@ -49,5 +49,12 @@ export const loginApi = {
     sendLoginEmailCode: (loginName) => {
       return getRequest(`/login/sendEmailCode/${loginName}`);
     },
-  
+    
+  /**
+   * 注册 @author 卓大
+   */
+  register: (param) => {
+    return postRequest('/register', param);
+  },
+
 };
