@@ -25,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.core.sync.ResponseTransformer;
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
@@ -72,6 +71,9 @@ public class FileStorageCloudServiceImpl implements IFileStorageService {
     private S3Client s3Client;
 
     @Resource
+    private S3Presigner s3Presigner;
+
+    @Resource
     private FileConfig cloudConfig;
 
     @Resource
@@ -104,7 +106,7 @@ public class FileStorageCloudServiceImpl implements IFileStorageService {
         // 根据文件路径获取并设置访问权限
         ObjectCannedACL acl = this.getACL(path);
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-                .bucket(cloudConfig.getBucketName())
+                .bucket(cloudConfig.getCloudBucketName())
                 .key(fileKey)
                 .metadata(userMetadata)
                 .contentLength(file.getSize())
@@ -113,22 +115,18 @@ public class FileStorageCloudServiceImpl implements IFileStorageService {
                 .contentDisposition("attachment;filename=" + urlEncoderFilename)
                 .acl(acl)
                 .build();
-        InputStream inputStream = null;
         try {
-            inputStream = file.getInputStream();
-            s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(inputStream, file.getSize()));
+            s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
         } catch (IOException e) {
             log.error("文件上传-发生异常：", e);
             return ResponseDTO.error(SystemErrorCode.SYSTEM_ERROR, "上传失败");
-        } finally {
-            IOUtils.closeQuietly(inputStream);
         }
         // 返回上传结果
         FileUploadVO uploadVO = new FileUploadVO();
         uploadVO.setFileName(originalFileName);
         uploadVO.setFileType(fileType);
         // 根据 访问权限 返回不同的 URL
-        String url = cloudConfig.getUrlPrefix() + fileKey;
+        String url = cloudConfig.getCloudPublicUrlPrefix() + fileKey;
         if (ObjectCannedACL.PRIVATE.equals(acl)) {
             // 获取临时访问的URL
             url = this.getFileUrl(fileKey).getData();
@@ -153,11 +151,10 @@ public class FileStorageCloudServiceImpl implements IFileStorageService {
 
         if (!fileKey.startsWith(FileFolderTypeEnum.FOLDER_PRIVATE)) {
             // 不是私有的 都公共读
-            return ResponseDTO.ok(cloudConfig.getUrlPrefix() + fileKey);
+            return ResponseDTO.ok(cloudConfig.getCloudPublicUrlPrefix() + fileKey);
         }
 
         // 如果是私有的，则规定时间内可以访问，超过规定时间，则连接失效
-
         String fileRedisKey = RedisKeyConst.Support.FILE_PRIVATE_VO + fileKey;
         FileVO fileVO = redisService.getObject(fileRedisKey, FileVO.class);
         if (fileVO == null) {
@@ -165,15 +162,22 @@ public class FileStorageCloudServiceImpl implements IFileStorageService {
             if (fileVO == null) {
                 return ResponseDTO.userErrorParam("文件不存在");
             }
-            GetObjectRequest getUrlRequest = GetObjectRequest.builder().bucket(cloudConfig.getBucketName()).key(fileKey).build();
-            GetObjectPresignRequest getObjectPresignRequest = GetObjectPresignRequest.builder().signatureDuration(Duration.ofSeconds(cloudConfig.getPrivateUrlExpireSeconds())).getObjectRequest(getUrlRequest).build();
+            GetObjectRequest getUrlRequest = GetObjectRequest
+                    .builder()
+                    .bucket(cloudConfig.getCloudBucketName())
+                    .key(fileKey)
+                    .build();
 
-            S3Presigner presigner = S3Presigner.builder().region(Region.of(cloudConfig.getRegion())).build();
+            GetObjectPresignRequest getObjectPresignRequest = GetObjectPresignRequest
+                    .builder()
+                    .signatureDuration(Duration.ofSeconds(cloudConfig.getCloudPrivateUrlExpireSeconds()))
+                    .getObjectRequest(getUrlRequest)
+                    .build();
 
-            PresignedGetObjectRequest presignedGetObjectRequest = presigner.presignGetObject(getObjectPresignRequest);
+            PresignedGetObjectRequest presignedGetObjectRequest = s3Presigner.presignGetObject(getObjectPresignRequest);
             String url = presignedGetObjectRequest.url().toString();
             fileVO.setFileUrl(url);
-            redisService.set(fileRedisKey, fileVO, cloudConfig.getPrivateUrlExpireSeconds() - 5);
+            redisService.set(fileRedisKey, fileVO, cloudConfig.getCloudPrivateUrlExpireSeconds() - 5);
         }
 
         return ResponseDTO.ok(fileVO.getFileUrl());
@@ -187,7 +191,7 @@ public class FileStorageCloudServiceImpl implements IFileStorageService {
     public ResponseDTO<FileDownloadVO> download(String key) {
 
         // 获取文件 meta
-        HeadObjectRequest objectRequest = HeadObjectRequest.builder().bucket(this.cloudConfig.getBucketName()).key(key).build();
+        HeadObjectRequest objectRequest = HeadObjectRequest.builder().bucket(this.cloudConfig.getCloudBucketName()).key(key).build();
         HeadObjectResponse headObjectResponse = s3Client.headObject(objectRequest);
         Map<String, String> userMetadata = headObjectResponse.metadata();
         FileMetadataVO metadataDTO = null;
@@ -201,7 +205,7 @@ public class FileStorageCloudServiceImpl implements IFileStorageService {
         }
 
         //获取oss对象
-        GetObjectRequest getObjectRequest = GetObjectRequest.builder().bucket(cloudConfig.getBucketName()).key(key).build();
+        GetObjectRequest getObjectRequest = GetObjectRequest.builder().bucket(cloudConfig.getCloudBucketName()).key(key).build();
         ResponseBytes<GetObjectResponse> s3ClientObject = s3Client.getObject(getObjectRequest, ResponseTransformer.toBytes());
 
         // 输入流转换为字节流
@@ -236,7 +240,7 @@ public class FileStorageCloudServiceImpl implements IFileStorageService {
      */
     @Override
     public ResponseDTO<String> delete(String fileKey) {
-        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder().bucket(cloudConfig.getBucketName()).key(fileKey).build();
+        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder().bucket(cloudConfig.getCloudBucketName()).key(fileKey).build();
         s3Client.deleteObject(deleteObjectRequest);
         return ResponseDTO.ok();
     }
