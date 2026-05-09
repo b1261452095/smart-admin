@@ -212,7 +212,7 @@ public class FileStorageSftpServiceImpl implements IFileStorageService {
      */
     private Session createSession() throws JSchException {
         log.info("正在连接 SFTP 服务器111: {}:{}, 用户: {}", host, port, username);
-        
+
         JSch jsch = new JSch();
         Session session = jsch.getSession(username, host, port);
         session.setPassword(password);

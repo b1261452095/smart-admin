@@ -68,12 +68,13 @@ spring:
       fail-on-unknown-properties: false
     default-property-inclusion: always
     date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT
+    time-zone: GMT+8
+
   # 上传文件和请求大小
   servlet:
     multipart:
-      max-file-size: 10MB # 单个文件的最大大小
-      max-request-size: 20MB # 整个请求的最大大小
+      max-file-size: 20MB # 单个文件的最大大小
+      max-request-size: 10MB # 整个请求的最大大小
 
   # 缓存实现类型
   cache:
