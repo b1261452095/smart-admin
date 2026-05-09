@@ -115,12 +115,12 @@ file:
       url-prefix: https://${file.storage.cloud.bucket-name}.${file.storage.cloud.endpoint}/
       private-url-expire-seconds: 3600
     sftp:
-      host: 14.103.206.253
+      host: www.lmnop.club
       port: 22
-      username: root
-      password: Bhb1261452095.
-      remote-path: /home/files
-      url-prefix: http://14.103.206.253/home/files/
+      username: sftp_user
+      password: b1261452095
+      remote-path: /files
+      url-prefix: http://www.lmnop.club/files/
 
 # open api配置
 springdoc:
