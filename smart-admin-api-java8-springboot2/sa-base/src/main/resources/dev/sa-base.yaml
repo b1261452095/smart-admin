@@ -23,9 +23,10 @@ spring:
   # redis 连接池配置信息
   redis:
     database: 1
-    host: 124.222.30.57
+#    host: 124.222.30.57
+    host: 127.0.0.1
     port: 6379
-    password: b1261452095
+    password:
     timeout: 10000ms
     lettuce:
       pool:
@@ -111,6 +112,7 @@ file:
       region: oss-cn-hangzhou
       endpoint: oss-cn-hangzhou.aliyuncs.com
       bucket-name: 1024lab-smart-admin
+      public-url-prefix: http://127.0.0.1:1024/files
       access-key:
       secret-key:
       url-prefix: https://${file.storage.cloud.bucket-name}.${file.storage.cloud.endpoint}/
