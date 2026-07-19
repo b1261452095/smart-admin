@@ -3,6 +3,7 @@ package net.lab1024.sa.base.config;
 import lombok.Data;
 import net.lab1024.sa.base.module.support.file.service.FileStorageCloudServiceImpl;
 import net.lab1024.sa.base.module.support.file.service.FileStorageLocalServiceImpl;
+import net.lab1024.sa.base.module.support.file.service.FileStorageSftpServiceImpl;
 import net.lab1024.sa.base.module.support.file.service.IFileStorageService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -35,6 +36,8 @@ public class FileConfig implements WebMvcConfigurer {
     private static final String MODE_CLOUD = "cloud";
 
     private static final String MODE_LOCAL = "local";
+
+    private static final String MODE_SFTP = "sftp";
 
     @Value("${file.storage.mode}")
     private String mode;
@@ -113,6 +116,12 @@ public class FileConfig implements WebMvcConfigurer {
     @ConditionalOnProperty(prefix = "file.storage", name = {"mode"}, havingValue = MODE_LOCAL)
     public IFileStorageService initLocalFileService() {
         return new FileStorageLocalServiceImpl();
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "file.storage", name = {"mode"}, havingValue = MODE_SFTP)
+    public IFileStorageService initSftpFileService() {
+        return new FileStorageSftpServiceImpl();
     }
 
     @Override

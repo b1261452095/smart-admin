@@ -26,6 +26,8 @@ public class AdminSwaggerTagConst extends SwaggerTagConst {
 
         public static final String OA_NOTICE = "OA办公-通知公告";
 
+        public static final String SHOP_SETTING = "商城管理-店铺设置";
+
     }
 
 
