@@ -90,6 +90,7 @@
         </template>
         <template v-if="column.dataIndex === 'action'">
           <div class="smart-table-operate">
+            <a-button type="link" @click="showSku(record)" v-privilege="'shop:sku:query'">SKU</a-button>
             <a-button type="link" @click="showForm(undefined, record)" v-privilege="'shop:product:update'">编辑</a-button>
             <a-button type="link" danger @click="confirmDelete(record)" v-privilege="'shop:product:delete'">删除</a-button>
           </div>
@@ -226,6 +227,7 @@
 
 <script setup lang="ts">
   import { onMounted, reactive, ref } from 'vue';
+  import { useRouter } from 'vue-router';
   import { message, Modal } from 'ant-design-vue';
   import Upload from '/@/components/support/file-upload/index.vue';
   import { SmartLoading } from '/@/components/framework/smart-loading';
@@ -248,7 +250,7 @@
     {
       title: '类目',
       dataIndex: 'categoryName',
-      width: 140,
+      width: 190,
     },
     {
       title: '价格(分)',
@@ -293,6 +295,7 @@
     searchCount: true,
   };
   const queryForm = reactive<any>({ ...queryFormDefault });
+  const router = useRouter();
   const tableLoading = ref(false);
   const tableData = ref([]);
   const total = ref(0);
@@ -374,6 +377,15 @@
       loadDetail(productId);
     }
     formVisible.value = true;
+  }
+
+  function showSku(record) {
+    router.push({
+      path: '/shop/product/sku',
+      query: {
+        productId: record.productId,
+      },
+    });
   }
 
   async function loadDetail(productId) {
