@@ -135,6 +135,7 @@
       title: '操作',
       dataIndex: 'action',
       width: 220,
+      fixed: 'right',
     },
   ];
 

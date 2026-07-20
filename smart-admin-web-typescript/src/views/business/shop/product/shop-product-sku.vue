@@ -166,7 +166,7 @@
     { title: '可售库存', dataIndex: 'availableStock', width: 110 },
     { title: '预警库存', dataIndex: 'warningStock', width: 110 },
     { title: '禁用', dataIndex: 'disabledFlag', width: 90 },
-    { title: '操作', dataIndex: 'action', width: 90 },
+    { title: '操作', dataIndex: 'action', width: 90, fixed: 'right' },
   ];
 
   onMounted(async () => {
