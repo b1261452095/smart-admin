@@ -1,0 +1,50 @@
+-- 商城客户管理：客户与地址
+
+CREATE TABLE IF NOT EXISTS `shop_customer` (
+  `customer_id` bigint NOT NULL AUTO_INCREMENT COMMENT '客户ID',
+  `tenant_id` bigint NOT NULL DEFAULT 1 COMMENT '租户ID',
+  `customer_no` varchar(64) NOT NULL COMMENT '客户编号',
+  `customer_name` varchar(100) DEFAULT NULL COMMENT '客户名称',
+  `email` varchar(150) DEFAULT NULL COMMENT '邮箱',
+  `phone` varchar(50) DEFAULT NULL COMMENT '手机号',
+  `login_pwd` varchar(255) NOT NULL COMMENT '登录密码',
+  `register_source` int NOT NULL DEFAULT 1 COMMENT '注册来源：1邮箱 2手机 3后台导入',
+  `disabled_flag` tinyint(1) NOT NULL DEFAULT 0 COMMENT '禁用状态',
+  `deleted_flag` tinyint(1) NOT NULL DEFAULT 0 COMMENT '删除状态',
+  `last_login_time` datetime DEFAULT NULL COMMENT '最后登录时间',
+  `login_token` varchar(100) DEFAULT NULL COMMENT 'C端登录token',
+  `remark` varchar(500) DEFAULT NULL COMMENT '备注',
+  `create_user_id` bigint DEFAULT NULL COMMENT '创建人',
+  `update_user_id` bigint DEFAULT NULL COMMENT '更新人',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `version` int NOT NULL DEFAULT 1 COMMENT '版本',
+  PRIMARY KEY (`customer_id`),
+  UNIQUE KEY `uk_tenant_customer_no` (`tenant_id`, `customer_no`),
+  UNIQUE KEY `uk_tenant_email_deleted` (`tenant_id`, `email`, `deleted_flag`),
+  UNIQUE KEY `uk_tenant_phone_deleted` (`tenant_id`, `phone`, `deleted_flag`),
+  KEY `idx_tenant_create_time` (`tenant_id`, `create_time`),
+  KEY `idx_login_token` (`login_token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='商城客户';
+
+CREATE TABLE IF NOT EXISTS `shop_customer_address` (
+  `address_id` bigint NOT NULL AUTO_INCREMENT COMMENT '地址ID',
+  `tenant_id` bigint NOT NULL DEFAULT 1 COMMENT '租户ID',
+  `customer_id` bigint NOT NULL COMMENT '客户ID',
+  `receiver_name` varchar(100) NOT NULL COMMENT '收货人',
+  `receiver_phone` varchar(50) NOT NULL COMMENT '收货电话',
+  `country_code` varchar(20) DEFAULT NULL COMMENT '国家/地区',
+  `province` varchar(100) DEFAULT NULL COMMENT '省',
+  `city` varchar(100) DEFAULT NULL COMMENT '市',
+  `district` varchar(100) DEFAULT NULL COMMENT '区',
+  `address_detail` varchar(500) NOT NULL COMMENT '详细地址',
+  `postal_code` varchar(30) DEFAULT NULL COMMENT '邮编',
+  `default_flag` tinyint(1) NOT NULL DEFAULT 0 COMMENT '默认地址',
+  `deleted_flag` tinyint(1) NOT NULL DEFAULT 0 COMMENT '删除状态',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `version` int NOT NULL DEFAULT 1 COMMENT '版本',
+  PRIMARY KEY (`address_id`),
+  KEY `idx_customer_deleted` (`customer_id`, `deleted_flag`),
+  KEY `idx_tenant_customer` (`tenant_id`, `customer_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='商城客户地址';

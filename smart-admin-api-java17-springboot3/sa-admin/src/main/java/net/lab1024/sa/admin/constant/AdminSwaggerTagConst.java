@@ -38,6 +38,10 @@ public class AdminSwaggerTagConst extends SwaggerTagConst {
 
         public static final String SHOP_ORDER = "商城管理-订单管理";
 
+        public static final String SHOP_CUSTOMER = "商城管理-客户管理";
+
+        public static final String SHOP_CMS = "商城管理-店铺装修";
+
     }
 
 
