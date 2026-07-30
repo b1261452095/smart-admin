@@ -8,12 +8,12 @@ export const revalidate = 300;
 
 export const metadata = buildMetadata({
   title: "Home",
-  description: "Browse featured products and curated collections from Smart Storefront.",
+  description: "Discover considered intimates, sleepwear, and jewelry for everyday self-expression.",
   path: "/"
 });
 
 export default async function HomePage() {
-  const [blocks, products] = await Promise.all([getCmsBlocks(), getProducts({ limit: 8 })]);
+  const [blocks, products] = await Promise.all([getCmsBlocks(), getProducts({ limit: 16 })]);
 
   return (
     <>

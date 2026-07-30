@@ -12,7 +12,7 @@ type SearchPageProps = {
 
 export const metadata = buildMetadata({
   title: "Search",
-  description: "Search products from the Smart Storefront catalog.",
+  description: "Search the current jewelry collection.",
   path: "/search"
 });
 
@@ -25,17 +25,24 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       <div className="page-heading">
         <p className="eyebrow">Search</p>
         <h1>{query ? `Results for ${query}` : "Search products"}</h1>
-        <p>Search is server-rendered first, then can be upgraded to Meilisearch or Elasticsearch when the catalog grows.</p>
+        <p>Search by piece, material, or collection.</p>
       </div>
       <form className="search-form" action="/search">
         <input name="q" type="search" defaultValue={query} placeholder="Search bracelets, necklaces, rings" />
         <button type="submit">Search</button>
       </form>
-      <div className="product-grid">
-        {products.map((product) => (
-          <ProductCard key={product.productId} product={product} />
-        ))}
-      </div>
+      {products.length ? (
+        <div className="product-grid">
+          {products.map((product) => (
+            <ProductCard key={product.productId} product={product} />
+          ))}
+        </div>
+      ) : (
+        <div className="empty-state">
+          <h2>No matches</h2>
+          <p>Try a broader search or browse the full collection.</p>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,7 +1,8 @@
-import { notFound } from "next/navigation";
+import Link from "next/link";
 import { JsonLd } from "../../../components/json-ld";
 import { ProductCard } from "../../../components/product-card";
-import { formatMoney } from "../../../lib/format";
+import { AddToCartButton } from "../../../components/storefront/add-to-cart-button";
+import { Money } from "../../../components/storefront/money";
 import { getProductBySlug, getProducts } from "../../../lib/api";
 import { buildMetadata, productJsonLd } from "../../../lib/seo";
 
@@ -36,10 +37,21 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const product = await getProductBySlug(params.slug);
 
   if (!product) {
-    notFound();
+    return (
+      <div className="page-shell">
+        <div className="page-heading">
+          <p className="eyebrow">404</p>
+          <h1>Product not found</h1>
+          <p>The product may have moved, or it has not been published to the storefront yet.</p>
+        </div>
+        <Link className="primary-link" href="/">
+          Back to home
+        </Link>
+      </div>
+    );
   }
 
-  const related = (await getProducts({ limit: 4 })).filter((item) => item.productId !== product.productId).slice(0, 3);
+  const related = (await getProducts({ limit: 5 })).filter((item) => item.productId !== product.productId).slice(0, 4);
 
   return (
     <div className="page-shell">
@@ -52,11 +64,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <p className="eyebrow">{product.categoryName || "Product"}</p>
           <h1>{product.productName}</h1>
           {product.subTitle ? <p className="detail-copy">{product.subTitle}</p> : null}
-          <div className="price">{formatMoney(product.salePriceCent, product.currency)}</div>
-          <a className="primary-link" href="#checkout">
-            Add to cart
-          </a>
-          <p className="detail-copy">{product.productDetail || "Product details are managed from the SmartAdmin shop backend."}</p>
+          <div className="price">
+            <Money valueCent={product.salePriceCent} currency={product.currency} />
+          </div>
+          <AddToCartButton product={product} />
+          <p className="detail-copy">{product.productDetail || product.subTitle || "Explore this piece from the current collection."}</p>
         </div>
       </article>
 

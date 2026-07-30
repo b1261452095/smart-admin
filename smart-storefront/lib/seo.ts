@@ -8,22 +8,23 @@ type SeoInput = {
   description: string;
   path?: string;
   image?: string;
+  noIndex?: boolean;
 };
 
 export function buildMetadata(input: SeoInput): Metadata {
   const siteUrl = getSiteUrl();
   const url = `${siteUrl}${input.path || ""}`;
-  const title = input.title.includes(getStoreName()) ? input.title : `${input.title} | ${getStoreName()}`;
+  const socialTitle = input.title.includes(getStoreName()) ? input.title : `${input.title} | ${getStoreName()}`;
 
   return {
     metadataBase: new URL(siteUrl),
-    title,
+    title: input.title,
     description: input.description,
     alternates: {
       canonical: url
     },
     openGraph: {
-      title,
+      title: socialTitle,
       description: input.description,
       url,
       siteName: getStoreName(),
@@ -32,10 +33,16 @@ export function buildMetadata(input: SeoInput): Metadata {
     },
     twitter: {
       card: "summary_large_image",
-      title,
+      title: socialTitle,
       description: input.description,
       images: input.image ? [input.image] : undefined
-    }
+    },
+    robots: input.noIndex
+      ? {
+          index: false,
+          follow: false
+        }
+      : undefined
   };
 }
 

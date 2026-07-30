@@ -1,21 +1,20 @@
-import Link from "next/link";
 import { Category } from "../lib/types";
 import { getStoreName } from "../lib/url";
+import { StorefrontNav } from "./storefront/storefront-nav";
 
-export function SiteHeader({ categories }: { categories: Category[] }) {
+type SiteHeaderProps = {
+  announcement?: string;
+  announcementHref?: string;
+  categories: Category[];
+};
+
+export function SiteHeader({ announcement, announcementHref, categories }: SiteHeaderProps) {
   return (
-    <header className="site-header">
-      <Link className="brand" href="/" aria-label={`${getStoreName()} home`}>
-        {getStoreName()}
-      </Link>
-      <nav className="main-nav" aria-label="Main navigation">
-        {categories.slice(0, 5).map((category) => (
-          <Link key={category.categoryId} href={`/collections/${category.slug}`}>
-            {category.categoryName}
-          </Link>
-        ))}
-        <Link href="/search">Search</Link>
-      </nav>
-    </header>
+    <StorefrontNav
+      announcement={announcement}
+      announcementHref={announcementHref}
+      categories={categories}
+      storeName={getStoreName()}
+    />
   );
 }

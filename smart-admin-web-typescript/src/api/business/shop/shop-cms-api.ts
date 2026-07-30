@@ -3,32 +3,42 @@
  */
 import { getRequest, postRequest } from '/@/lib/axios';
 
+type CmsRequest = Record<string, unknown>;
+
 export const shopCmsApi = {
-  queryPage: (param) => {
+  queryPage: (param: CmsRequest) => {
     return postRequest('/shop/cms/block/queryPage', param);
   },
 
-  get: (blockId) => {
-    return getRequest(`/shop/cms/block/get/${blockId}`);
+  queryList: (param: CmsRequest) => {
+    return postRequest('/shop/cms/block/queryList', param);
   },
 
-  add: (param) => {
+  get: (blockId: number) => {
+    return getRequest(`/shop/cms/block/get/${blockId}`, {});
+  },
+
+  add: (param: CmsRequest) => {
     return postRequest('/shop/cms/block/add', param);
   },
 
-  update: (param) => {
+  update: (param: CmsRequest) => {
     return postRequest('/shop/cms/block/update', param);
   },
 
-  updateDisabled: (param) => {
+  updateDisabled: (param: CmsRequest) => {
     return postRequest('/shop/cms/block/updateDisabled', param);
   },
 
-  delete: (blockId) => {
-    return getRequest(`/shop/cms/block/delete/${blockId}`);
+  updateSort: (param: CmsRequest) => {
+    return postRequest('/shop/cms/block/updateSort', param);
   },
 
-  clientList: (param) => {
+  delete: (blockId: number) => {
+    return getRequest(`/shop/cms/block/delete/${blockId}`, {});
+  },
+
+  clientList: (param: CmsRequest) => {
     return postRequest('/shop/client/cms/block/list', param);
   },
 };

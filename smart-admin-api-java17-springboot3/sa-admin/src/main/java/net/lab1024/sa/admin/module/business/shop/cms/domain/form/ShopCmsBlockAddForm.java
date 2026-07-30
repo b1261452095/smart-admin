@@ -19,7 +19,7 @@ public class ShopCmsBlockAddForm {
     @Schema(description = "租户ID")
     private Long tenantId;
 
-    @Schema(description = "区块类型：1首页Banner 2导航菜单 3推荐商品")
+    @Schema(description = "区块类型：1主视觉 2分类入口 3单品推荐 4商品列表 5图文双栏 6全幅图片 7公告栏 8视频")
     @NotNull(message = "请选择区块类型")
     private Integer blockType;
 

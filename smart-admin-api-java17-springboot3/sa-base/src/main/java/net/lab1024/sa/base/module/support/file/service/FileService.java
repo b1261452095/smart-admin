@@ -113,6 +113,13 @@ public class FileService {
         // 将fileId 返回给前端
         uploadVO.setFileId(fileEntity.getFileId());
 
+        // Generate the URL after persistence so private storage can create a signed URL.
+        ResponseDTO<String> fileUrlResponse = fileStorageService.getFileUrl(uploadVO.getFileKey());
+        if (!fileUrlResponse.getOk()) {
+            return ResponseDTO.error(fileUrlResponse);
+        }
+        uploadVO.setFileUrl(fileUrlResponse.getData());
+
         return response;
     }
 

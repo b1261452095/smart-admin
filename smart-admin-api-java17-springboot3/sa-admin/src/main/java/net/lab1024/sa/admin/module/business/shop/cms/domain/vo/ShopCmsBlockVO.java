@@ -58,4 +58,7 @@ public class ShopCmsBlockVO {
 
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
+
+    @Schema(description = "数据版本")
+    private Integer version;
 }

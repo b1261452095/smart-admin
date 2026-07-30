@@ -104,24 +104,24 @@ server:
 # 文件上传 配置
 file:
   storage:
-    mode: local  # 改为 sftp 模式
+    mode: cloud  # 改为 sftp 模式
     #    mode: local
     local:
       upload-path: ./upload/   #文件上传目录
       url-prefix:
     cloud:
-      region: oss-cn-hangzhou
-      endpoint: oss-cn-hangzhou.aliyuncs.com
-      bucket-name: 1024lab-smart-admin
-      public-url-prefix: http://127.0.0.1:1024/files
-      access-key:
-      secret-key:
-      url-prefix: https://${file.storage.cloud.bucket-name}.${file.storage.cloud.endpoint}/
+      region: ap-nanjing
+      endpoint: https://cos.ap-nanjing.myqcloud.com
+      bucket-name: dulizhan-1300273352
+      public-url-prefix: https://dulizhan-1300273352.cos.ap-nanjing.myqcloud.com/
+      access-key: AKID7Shnmo4996zjLrFbs4BA0d3QehXAa7by
+      secret-key: FKJ7lBTaUC4nLgtujNH3e2ObbgmuxoRt
+      url-prefix: https://dulizhan-1300273352.cos.ap-nanjing.myqcloud.com
       private-url-expire-seconds: 3600
     sftp:
       host: www.lmnop.club
       port: 22
-      username: sftp_user
+      username: lmnop
       password: b1261452095
       remote-path: /files
       url-prefix: http://www.lmnop.club/files/

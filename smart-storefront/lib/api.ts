@@ -84,10 +84,28 @@ function normalizeCategory(category: Partial<Category>): Category {
   };
 }
 
+function normalizeCmsBlock(block: CmsBlock & { image?: unknown }): CmsBlock {
+  const image = Array.isArray(block.image)
+    ? block.image[0]?.fileUrl || block.image[0]?.url || ""
+    : typeof block.image === "string"
+      ? block.image
+      : "";
+
+  return {
+    ...block,
+    blockId: Number(block.blockId || 0),
+    blockType: Number(block.blockType || 0),
+    productId: block.productId ? Number(block.productId) : undefined,
+    image,
+    sort: Number(block.sort || 0),
+    version: Number(block.version || 0)
+  };
+}
+
 export async function getCmsBlocks(blockType?: number) {
   const fallback = blockType ? mockCmsBlocks.filter((block) => block.blockType === blockType) : mockCmsBlocks;
 
-  return requestSmartAdmin<CmsBlock[]>("/shop/client/cms/block/list", {
+  const blocks = await requestSmartAdmin<CmsBlock[]>("/shop/client/cms/block/list", {
     method: "POST",
     body: {
       tenantId: getTenantId(),
@@ -95,6 +113,11 @@ export async function getCmsBlocks(blockType?: number) {
     },
     fallback
   });
+
+  return blocks
+    .map(normalizeCmsBlock)
+    .filter((block) => !block.disabledFlag)
+    .sort((left, right) => (left.sort || 0) - (right.sort || 0) || left.blockId - right.blockId);
 }
 
 export async function getCategories() {

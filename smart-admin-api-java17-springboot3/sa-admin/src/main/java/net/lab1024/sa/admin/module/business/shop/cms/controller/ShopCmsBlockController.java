@@ -10,6 +10,7 @@ import net.lab1024.sa.admin.module.business.shop.cms.domain.form.ShopCmsBlockAdd
 import net.lab1024.sa.admin.module.business.shop.cms.domain.form.ShopCmsBlockClientQueryForm;
 import net.lab1024.sa.admin.module.business.shop.cms.domain.form.ShopCmsBlockDisabledForm;
 import net.lab1024.sa.admin.module.business.shop.cms.domain.form.ShopCmsBlockQueryForm;
+import net.lab1024.sa.admin.module.business.shop.cms.domain.form.ShopCmsBlockSortForm;
 import net.lab1024.sa.admin.module.business.shop.cms.domain.form.ShopCmsBlockUpdateForm;
 import net.lab1024.sa.admin.module.business.shop.cms.domain.vo.ShopCmsBlockVO;
 import net.lab1024.sa.admin.module.business.shop.cms.service.ShopCmsBlockService;
@@ -34,6 +35,13 @@ public class ShopCmsBlockController {
     @SaCheckPermission("shop:cms:query")
     public ResponseDTO<PageResult<ShopCmsBlockVO>> queryPage(@RequestBody @Valid ShopCmsBlockQueryForm queryForm) {
         return shopCmsBlockService.queryPage(queryForm);
+    }
+
+    @Operation(summary = "查询店铺装修区块列表")
+    @PostMapping("/shop/cms/block/queryList")
+    @SaCheckPermission("shop:cms:query")
+    public ResponseDTO<java.util.List<ShopCmsBlockVO>> queryList(@RequestBody @Valid ShopCmsBlockQueryForm queryForm) {
+        return shopCmsBlockService.queryList(queryForm);
     }
 
     @Operation(summary = "查询CMS区块详情")
@@ -69,6 +77,13 @@ public class ShopCmsBlockController {
     @SaCheckPermission("shop:cms:update")
     public ResponseDTO<String> updateDisabled(@RequestBody @Valid ShopCmsBlockDisabledForm disabledForm) {
         return shopCmsBlockService.updateDisabled(disabledForm, SmartRequestUtil.getRequestUser());
+    }
+
+    @Operation(summary = "批量更新CMS区块顺序")
+    @PostMapping("/shop/cms/block/updateSort")
+    @SaCheckPermission("shop:cms:update")
+    public ResponseDTO<String> updateSort(@RequestBody @Valid ShopCmsBlockSortForm sortForm) {
+        return shopCmsBlockService.updateSort(sortForm, SmartRequestUtil.getRequestUser());
     }
 
     @Operation(summary = "删除CMS区块")

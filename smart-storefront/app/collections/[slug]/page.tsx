@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: CollectionPageProps) {
 
   return buildMetadata({
     title,
-    description: `Shop ${title} products with fast server-rendered pages and clean SEO metadata.`,
+    description: `Explore the latest ${title} pieces in the collection.`,
     path: `/collections/${params.slug}`,
     image: category?.categoryImage
   });
@@ -44,13 +44,20 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
       <div className="page-heading">
         <p className="eyebrow">Collection</p>
         <h1>{title}</h1>
-        <p>Server-rendered collection pages give search engines stable URLs, readable content, and product links.</p>
+        <p>Explore the current selection and find a piece that feels like your own.</p>
       </div>
-      <div className="product-grid">
-        {products.map((product) => (
-          <ProductCard key={product.productId} product={product} />
-        ))}
-      </div>
+      {products.length ? (
+        <div className="product-grid">
+          {products.map((product) => (
+            <ProductCard key={product.productId} product={product} />
+          ))}
+        </div>
+      ) : (
+        <div className="empty-state">
+          <h2>No pieces found</h2>
+          <p>This collection is being updated. Explore the full catalogue in the meantime.</p>
+        </div>
+      )}
     </div>
   );
 }

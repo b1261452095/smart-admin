@@ -15,4 +15,8 @@ public class ShopCmsBlockUpdateForm extends ShopCmsBlockAddForm {
     @Schema(description = "区块ID")
     @NotNull(message = "区块ID不能为空")
     private Long blockId;
+
+    @Schema(description = "数据版本")
+    @NotNull(message = "数据版本不能为空")
+    private Integer version;
 }

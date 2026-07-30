@@ -1,0 +1,14 @@
+{
+  "scannedAt": "2026-07-23",
+  "sources": {
+    "packageJson": "package.json",
+    "globalStyles": "app/globals.css"
+  },
+  "framework": "Next.js 14.2.30 App Router with React 18.3.1",
+  "fontStack": "Arial and Helvetica in production globals; Georgia appears only in design previews",
+  "palette": "Hex custom properties in app/globals.css using teal, yellow, rose, ink, and pale green",
+  "motion": "motion-cut; no animation library installed",
+  "spacing": "Ad hoc pixel spacing; no named spacing scale",
+  "assets": "CMS and remote Unsplash images; no local brand imagery",
+  "designSystem": "No design.md or tokens.css found"
+}

@@ -1,0 +1,78 @@
+:root {
+  --color-paper: oklch(98.5% 0.004 70);
+  --color-paper-2: oklch(95.5% 0.006 70);
+  --color-paper-3: oklch(91% 0.008 70);
+  --color-rule: oklch(86% 0.006 70);
+  --color-rule-2: oklch(70% 0.01 60);
+  --color-muted: oklch(48% 0.012 45);
+  --color-neutral: oklch(34% 0.01 35);
+  --color-ink-2: oklch(24% 0.01 30);
+  --color-ink: oklch(13% 0.008 30);
+  --color-accent: oklch(40% 0.13 20);
+  --color-accent-deep: oklch(31% 0.11 20);
+  --color-accent-ink: oklch(98.5% 0.004 70);
+  --color-focus: oklch(58% 0.19 255);
+  --color-error: oklch(50% 0.19 25);
+  --color-success: oklch(43% 0.11 150);
+  --color-overlay: oklch(11% 0.008 30 / 0.62);
+
+  --font-display: "Bodoni Moda", "Didot", ui-serif, serif;
+  --font-body: "Manrope", "Avenir Next", ui-sans-serif, sans-serif;
+  --font-outlier: ui-monospace, "SFMono-Regular", monospace;
+
+  --display-weight: 400;
+  --body-weight: 400;
+  --body-weight-strong: 700;
+  --tracking-display: 0;
+  --tracking-label: 0;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 1.25rem;
+  --text-lg: 1.5625rem;
+  --text-xl: 1.953rem;
+  --text-2xl: 2.441rem;
+  --text-3xl: 3.052rem;
+  --text-4xl: 3.815rem;
+  --text-display-s: 4.75rem;
+  --text-display: 3.815rem;
+
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
+  --space-4xl: 9rem;
+  --space-5xl: 12rem;
+
+  --page-gutter: clamp(1rem, 4vw, 4rem);
+  --content-max: 88rem;
+  --reading-max: 65ch;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 120ms;
+  --dur-short: 240ms;
+  --dur-long: 520ms;
+
+  --rule-hair: 1px;
+  --rule-fine: 2px;
+  --radius-card: 0;
+  --radius-pill: 999px;
+  --radius-input: 2px;
+  --shadow-card: 0 1px 2px oklch(18% 0.016 52 / 0.08);
+
+  --z-base: 1;
+  --z-raised: 10;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-tooltip: 600;
+}
